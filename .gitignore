@@ -1,0 +1,8 @@
+parcial-02.zip
+
+#dependencias 
+node_modules*
+parcial-02/node_modules
+parcial-02/.idea
+mvc/.idea
+.idea
