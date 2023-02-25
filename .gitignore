@@ -2,7 +2,7 @@ parcial-02.zip
 
 #dependencias 
 node_modules*
-parcial-02/node_modules
-parcial-02/.idea
+front-vue/node_modules
+front-vue/.idea
 mvc/.idea
 .idea
