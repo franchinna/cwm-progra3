@@ -4,5 +4,9 @@ parcial-02.zip
 node_modules*
 front-vue/node_modules
 front-vue/.idea
+front-vue/.DS_Store
 mvc/.idea
+mvc/.DS_Store
 .idea
+.DS_Store
+.DS_Store*
