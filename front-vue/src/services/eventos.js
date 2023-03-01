@@ -1,21 +1,15 @@
 import {API} from "../constants";
-// Creamos una variable para almacenar los eventos.
+
 let eventos = null;
 
-// Creamos el objeto del servicio.
 const eventosService = {
     /**
-     * Retorna los eventos.
+     * Retorna los eventos del site.
      *
      * @return {Promise<Response | never>}
      */
     getAll: async function() {
-        const fetchResponse = await fetch(`${API}/eventos`, {
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
-            //credentials: 'include'
-        });
+        const fetchResponse = await fetch(`${API}/eventos`, { });
         const respuesta     = await fetchResponse.json();
         eventos = respuesta.data;
         
@@ -23,7 +17,7 @@ const eventosService = {
     },
 
     /**
-     * Retorna los datos de un evento.
+     * Retorna los datos de un evento segun su ID.
      *
      * @param {Number} id
      * @return {Promise}
@@ -34,51 +28,30 @@ const eventosService = {
         });
         const respuesta     = await fetchResponse.json();
 
-        //console.log({...respuesta.data});
-
         return {...respuesta.data};
     },
 
     /**
-     * Retorna los participantes de un evento.
-     *
-     * @param {Number} id
-     * @return {Promise}
-     */
-    getAmigos:async function(id) {
-
-        const fetchResponse = await fetch(`${API}/mis_amigos/${id}`, {
-            credentials: 'include'
-        });
-        const respuesta = await fetchResponse.json();
-        
-        return [...respuesta.data];
-    },
-
-    /**
-     * Retorna los datos de un comentario.
+     * Retorna los paticipantes de un Evento segun su ID.
      *
      * @param {Number} id
      * @return {Promise<Response | never>}
      */
     getParticipantes:async function(id) {
 
-        //console.log('id en eventos.js -> ',id);
-
-        const fetchResponse = await fetch(`${API}/participantes/${id}`, {
-            //credentials: 'include'
-        });
+        const fetchResponse = await fetch(`${API}/participantes/${id}`, { });
         const respuesta = await fetchResponse.json();
 
         eventos = respuesta.data;
         
-        //console.log('Respuesta de getByIdUsuario: ',{...eventos});
         return [...eventos];
     },
 
     /**
-     * Crea un nuevo comentario en el servidor.
+     * Crea un nuevo evento en el servidor.
      *
+     * TODO <------     QUE LOS USUARIOS PUEDAN CREAR EVENTOS MANUALMENTE
+     * 
      * @param {Number} id
      * @param {{}} data
      * @return {Promise<Response | never>}
@@ -97,8 +70,10 @@ const eventosService = {
     },
 
     /**
-     * Edita un comentario en el servidor según su id.
+     * Edita un comentario en el servidor según el id del evento.
      *
+     * TODO <------     QUE LOS USUARIOS PUEDAN EDIT EVENTOS MANUALMENTE
+     * 
      * @param {Number} id
      * @param {{}} data
      * @return {Promise<Response | never>}
@@ -119,8 +94,10 @@ const eventosService = {
     },
 
     /**
-     * Elimina un comentario en el servidor según su id.
+     * Elimina un comentario en el servidor según el id del evento.
      *
+     * TODO <------     QUE LOS USUARIOS PUEDAN DELETE EVENTOS MANUALMENTE
+     * 
      * @param {Number} id
      * @return {Promise}
      */
@@ -139,5 +116,4 @@ const eventosService = {
     }
 };
 
-// Exportamos el servicio.
 export default eventosService;

@@ -1,8 +1,7 @@
 import {API} from "../constants";
-// Creamos una variable para almacenar los comentarios.
+
 let comentarios = null;
 
-// Creamos el objeto del servicio.
 const comentariosService = {
     /**
      * Retorna los comentarios.
@@ -11,9 +10,6 @@ const comentariosService = {
      */
     getAll: async function() {
         const fetchResponse = await fetch(`${API}/comentarios`, {
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
             credentials: 'include'
         });
         const respuesta     = await fetchResponse.json();
@@ -29,9 +25,6 @@ const comentariosService = {
      */
     async getByPk(id) {
         const fetchResponse = await fetch(`${API}/comentarios/${id}`, {
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
             credentials: 'include'
         });
         const respuesta     = await fetchResponse.json();
@@ -62,6 +55,8 @@ const comentariosService = {
     /**
      * Edita un comentario en el servidor según su id.
      *
+     * TODO <------------
+     * 
      * @param {Number} id
      * @param {{}} data
      * @return {Promise<Response | never>}
@@ -70,9 +65,6 @@ const comentariosService = {
         return fetch(`${API}/comentarios/${id}`, {
             method: 'PUT',
             body: JSON.stringify(data),
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
             credentials: 'include'
         })
             .then(rta => rta.json())
@@ -83,6 +75,8 @@ const comentariosService = {
 
     /**
      * Elimina un comentario en el servidor según su id.
+     * 
+     * TODO <----------------
      *
      * @param {Number} id
      * @return {Promise}
@@ -90,9 +84,6 @@ const comentariosService = {
     deleteItem: function(id) {
         return fetch(`${API}/comentarios/${id}`, {
             method: 'DELETE',
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
             credentials: 'include'
         })
             .then(rta => rta.json())
@@ -102,5 +93,4 @@ const comentariosService = {
     }
 };
 
-// Exportamos el servicio.
 export default comentariosService;

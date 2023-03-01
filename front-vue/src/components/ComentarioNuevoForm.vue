@@ -1,5 +1,5 @@
 <template>
-        <div-div class="col-2 col-lg-8">
+        <div class="col-2 col-lg-8">
           <h2>Completa el formulario para dejar el comentario</h2>
 
           <form action="#" method="post" @submit.prevent="grabar(comentario)">
@@ -52,7 +52,7 @@
               </button>
             </div>
           </form>
-        </div-div>
+        </div>
 </template>
 
 <script>

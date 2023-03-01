@@ -60,9 +60,6 @@ const posteosService = {
      */
     async getByPk(id) {
         const fetchResponse = await fetch(`${API}/posteos/${id}`, {
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
             credentials: 'include'
         });
         const respuesta     = await fetchResponse.json();
@@ -99,9 +96,6 @@ const posteosService = {
         return fetch(`${API}/posteos.php?id=${id}`, {
             method: 'PUT',
             body: JSON.stringify(data),
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
             credentials: 'include'
         })
             .then(rta => rta.json())
@@ -128,5 +122,4 @@ const posteosService = {
     }
 };
 
-// Exportamos el servicio.
 export default posteosService;

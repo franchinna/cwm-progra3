@@ -1,8 +1,7 @@
 import {API} from "../constants";
-// Creamos una variable para almacenar los amigos.
+
 let amigos = null;
 
-// Creamos el objeto del servicio.
 const amigosService = {
     /**
      * Retorna todos los amigos del usaurio logueado.
@@ -33,11 +32,7 @@ const amigosService = {
      */
     traerAmigosPendientes:async function(id) {
 
-        //console.log('id en amigos.js -> ',id);
-
-        const fetchResponse = await fetch(`${API}/pendientes/${id}`, {
-            //credentials: 'include'
-        });
+        const fetchResponse = await fetch(`${API}/pendientes/${id}`, { });
         const respuesta = await fetchResponse.json();
 
         amigos = respuesta.data;
@@ -54,37 +49,14 @@ const amigosService = {
      */
     traerNoAmigosPorUsuario:async function(id) {
 
-        //console.log('id en amigos.js -> ',id);
+        const fetchResponse = await fetch(`${API}/noAmigos/${id}`, { });
 
-        const fetchResponse = await fetch(`${API}/noAmigos/${id}`, {
-            //credentials: 'include'
-        });
         const respuesta = await fetchResponse.json();
 
         amigos = respuesta.data;
         
         //console.log('Respuesta de getByIdUsuario: ',{...amigos});
         return [...amigos];
-    },
-
-    /**
-     * Crea un nuevo comentario en el servidor.
-     *
-     * @param {Number} id
-     * @param {{}} data
-     * @return {Promise<Response | never>}
-     */
-    create: function(id,data) {
-
-        return fetch(`${API}/amigos/${id}`, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            credentials: 'include'
-        })
-            .then(rta => rta.json())
-            .then(response => {
-                return response;
-            });
     },
 
     /**

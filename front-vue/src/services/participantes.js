@@ -1,8 +1,8 @@
 import {API} from "../constants";
-// Creamos una variable para almacenar los participantes.
+
 let participantes = null;
 
-// Creamos el objeto del servicio.
+
 const participantesService = {
     /**
      * Retorna los participantes.
@@ -10,12 +10,7 @@ const participantesService = {
      * @return {Promise<Response | never>}
      */
     getAll: async function() {
-        const fetchResponse = await fetch(`${API}/participantes`, {
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
-            //credentials: 'include'
-        });
+        const fetchResponse = await fetch(`${API}/participantes`, { });
         const respuesta     = await fetchResponse.json();
         participantes = respuesta.data;
         
@@ -30,11 +25,8 @@ const participantesService = {
      */
     traerUsuariosPorEvento:async function(id) {
 
-        //console.log('id en participantes.js -> ',id);
 
-        const fetchResponse = await fetch(`${API}/participantes/${id}`, {
-            //credentials: 'include'
-        });
+        const fetchResponse = await fetch(`${API}/participantes/${id}`, { });
         const respuesta = await fetchResponse.json();
 
         participantes = respuesta.data;
@@ -63,9 +55,7 @@ const participantesService = {
     },
 
     /**
-     * Elimina al usuario logiado en el evento
-     *
-     *
+     * Elimina al usuario logiado en el eventO
      *
      */
     deleteItem: function(id, data) {
