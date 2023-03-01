@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-2">
+    <div class="mb-1">
         <AmigosMiniatura
         v-for="amigo in amigos"
         :key="amigo.id_amigo"

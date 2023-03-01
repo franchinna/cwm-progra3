@@ -28,11 +28,16 @@
 #app {
   background: #f3f3f3;
   min-height: 100vh;
+  padding-bottom: 3rem;
 }
 
 .alert h3,
 .alert span {
   background: transparent;
+}
+
+.alert{
+  border-left: 3px solid;
 }
 
 .navbar,
@@ -83,6 +88,7 @@ h1 {
 h2,
 h3 {
   font-family: "Lato-Regular";
+  line-height: inherit;
 }
 
 h2 {
@@ -117,6 +123,24 @@ h4, h5{
 
 .font-bold{
   font-family: "Lato-Bold";
+}
+
+.gap-8{
+  gap: 8px;
+}
+
+.gap-16{
+  gap: 16px;
+}
+
+.scroll{
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.scroll-250{
+  overflow-y: auto;
+  max-height: 250px;
 }
 
 .bi{
@@ -218,6 +242,37 @@ a.btn-outline-secondary:hover {
   box-shadow: 0 0 0 0.1rem rgba(8, 174, 234, 0.5);
 }
 
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.badge-danger,
+.btn-outline-danger:hover,
+.btn-outline-danger:not(:disabled):not(.disabled).active,
+.btn-outline-danger:not(:disabled):not(.disabled):active,
+.show > .btn-outline-danger.dropdown-toggle,
+a.btn-outline-danger:hover {
+  color: white;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger.focus,
+.btn-outline-danger:focus {
+  box-shadow: 0 0 0 0.1rem rgba(8, 174, 234, 0.5);
+}
+
+
+.btn-outline-danger i{
+  color: #dc3545;
+}
+
+.btn-outline-danger:hover i{
+  color: white;
+  transition: all ease-out 300;
+}
+
 .badge {
   font-size: 0.625rem;
 }
@@ -256,11 +311,8 @@ header .btn:hover {
   color: rgba(0, 0, 0, 0.7);
 }
 
-#home,
-#perfil,
-#posteoNuevo,
-#posteo, #evento, .container-fluid {
-  padding: 3em 0em;
+header {
+  margin-bottom: 2rem;
 }
 
 .text-secondary{
@@ -315,7 +367,6 @@ header .btn:hover {
 }
 
 .posteo ul li img {
-  border-radius: 100%;
   width: 24px;
 }
 
@@ -415,6 +466,17 @@ h2.logo {
   margin-top: 2em;
 }
 
+.avatar-amigo{
+  width: 2rem;
+  height: 2rem;
+  margin-right: -10px;
+  border: 2px solid #0099ff ;
+}
+
+.border-drop{
+  border-radius: 50% 5% 50% 50%;
+}
+
 #perfil {
   margin-bottom: 2em;
 }
@@ -426,8 +488,7 @@ h2.logo {
 }
 
 #perfil .avatar{
-  width: 150px;
-  border-radius: 150px;
+  width: 120px;
   margin: auto;
   border: 3px solid #b1b1b1;
   -webkit-box-shadow: 0px 0px 10px 5px rgba(237,237,237,1);
@@ -478,7 +539,8 @@ h2.logo {
 }
 
 .post-fav,
-.posteo p {
+.posteo p,
+.posteo h3 {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -566,10 +628,3 @@ footer .copy p {
   }
 }
 
-.avatar-amigo{
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  margin-right: -10px;
-  border: 2px solid #0099ff ;
-}

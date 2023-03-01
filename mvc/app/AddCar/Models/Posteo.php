@@ -27,14 +27,15 @@ class Posteo extends Modelo implements JsonSerializable
 
     /** @var array Lista de los atributos que permitidos cargar en nuestra clase. */
     protected $atributosPermitidos = [
-        'id_posteo', 
-        'titulo', 
-        'cuerpo', 
-        'fecha', 
-        'id_usuario', 
-        'email', 
-        'userimg', 
-        'username'];
+        'id_posteo',
+        'titulo',
+        'cuerpo',
+        'fecha',
+        'id_usuario',
+        'email',
+        'userimg',
+        'username'
+    ];
 
     public function jsonSerialize()
     {
@@ -56,8 +57,8 @@ class Posteo extends Modelo implements JsonSerializable
      */
     public function massAssignament(array $data)
     {
-        foreach($this->atributosPermitidos as $attr) {
-            if(isset($data[$attr])) {
+        foreach ($this->atributosPermitidos as $attr) {
+            if (isset($data[$attr])) {
                 $this->{$attr} = $data[$attr];
             }
         }
@@ -109,7 +110,7 @@ class Posteo extends Modelo implements JsonSerializable
         $stmt = $db->prepare($query);
         $stmt->execute([$id]);
 
-        if($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
             $posteo = new self;
             $posteo->id_posteo = (int) $fila['id_posteo'];
@@ -147,7 +148,7 @@ class Posteo extends Modelo implements JsonSerializable
             'id_usuario' => $data['id_usuario']
         ]);
 
-        if(!$exito) {
+        if (!$exito) {
             throw new Exception('No se pudo crear el Posteo.');
         }
 
@@ -168,6 +169,36 @@ class Posteo extends Modelo implements JsonSerializable
         $query = "select *
                     from posteos
                     where id_usuario = ?;";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute([$id_usuario]);
+
+        $salida = [];
+
+        while ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $posteo = new Posteo;
+            $posteo->massAssignament($fila);
+            $salida[] = $posteo;
+        }
+
+        return $salida;
+    }
+
+    /**
+     * Retorna un array con todos los amigos.
+     * Cada amigo va a esta representado como una instancia de Usuario.
+     *
+     * @return Amigo[]
+     */
+    public function listarPosteosAmigos($id_usuario)
+    {
+        $db = DBConnection::getConnection();
+
+        $query = "select p.*, u.usuario as username, u.imagen as userimg
+                from posteos p
+                inner join amigos a on p.id_usuario = a.id_amigo
+                inner join usuarios u on u.id = p.id_usuario
+                    where a.id_usuario = ? AND a.status != 0 AND a.status = 1";
 
         $stmt = $db->prepare($query);
         $stmt->execute([$id_usuario]);
@@ -293,7 +324,8 @@ class Posteo extends Modelo implements JsonSerializable
     public function setUserImg($userimg)
     {
         $this->userimg = $userimg;
-    }/**
+    }
+    /**
      * @return mixed
      */
     public function getUsername()
@@ -308,8 +340,4 @@ class Posteo extends Modelo implements JsonSerializable
     {
         $this->username = $username;
     }
-
-
-
-
 }

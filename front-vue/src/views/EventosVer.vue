@@ -2,10 +2,11 @@
   <section class="container-fluid" id="evento">
     <div class="container">
       <div class="row justify-content-center">
-        <Evento/>
-        <div class="col-12 col-md-6">
+        <Evento />
+        <!--Proximamente comentar eventos-->
+        <div class="col-12 col-md-6 d-none">
           <div class="text-right" v-if="store.auth.id !== null">
-            <form action="#" method="post" @submit.prevent="grabar(comentario)">
+            <form action="#" method="post" @submit.prevent="grabar()">
               <BaseNotificacion
                 :titulo="status.titulo"
                 :mensaje="status.mensaje"
@@ -45,6 +46,12 @@
               <SpinnerLoader v-if="estaCargando" />
             </form>
           </div>
+          <div class="text-center bg-light" v-else>
+            <p class="py-3">
+              <router-link to="/login"><b>Inicia sesión</b></router-link> para
+              comentar el evento.
+            </p>
+          </div>
           <div class="comentarios mb-3 bg-white">
             <p>comentario.cuerpo</p>
             <p class="f-14 text-secondary m-0">
@@ -61,7 +68,7 @@
 import store from "@/store";
 
 import SpinnerLoader from "@/components/SpinnerLoader";
-import Evento from '@/components/Evento';
+import Evento from "@/components/Evento";
 
 export default {
   name: "EventosVer",
@@ -72,7 +79,7 @@ export default {
   data: function () {
     return {
       store,
-      estaCargando: true,
+      estaCargando: false,
       comentarios: [],
       errores: {
         cuerpo: null,
@@ -84,23 +91,8 @@ export default {
       },
     };
   },
-  computed: { },
-  methods: {
-    /*refrescarComentarios() {
-      this.estaCargando = true;
-      comentariosService.getAll().then((response) => {
-        this.estaCargando = false;
-        this.comentarios = response;
-      });
-    },*/
-  },
-  mounted: function () {
-    this.estaCargando = false;
-    /*const id = this.$route.params.id;
-    comentariosService.getByPk(id).then((response) => {
-      this.estaCargando = false;
-      this.comentarios = response;
-    });*/
-  },
+  computed: {},
+  methods: {},
+  mounted: function () {},
 };
 </script>

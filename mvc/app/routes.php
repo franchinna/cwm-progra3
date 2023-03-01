@@ -14,9 +14,16 @@ Route::add('OPTIONS', '/api/usuarios/{id}', 'APIUserController@editar');
 
 //Amigos
 Route::add('GET', '/api/amigos/{id}', 'APIAmigosController@traerAmigosPorUsuario');
+Route::add('GET', '/api/noAmigos/{id}', 'APIAmigosController@traerNoAmigosPorUsuario');
+Route::add('GET', '/api/pendientes/{id}', 'APIAmigosController@traerAmigosPendientesPorUsuario');
+Route::add('POST', '/api/agregarAmigo/{id_usuario}/{id_amigo}', 'APIAmigosController@agregarAmigo');
+Route::add('PUT', '/api/aceptarAmigo/{id_usuario}/{id_amigo}', 'APIAmigosController@aceptarAmigo');
+Route::add('DELETE', '/api/eliminarAmigo/{id_usuario}/{id_amigo}', 'APIAmigosController@eliminarAmigo');
 
 //Participantes
 Route::add('GET', '/api/participantes/{id}', 'APIParticipantesController@traerParticipantesPorEvento');
+Route::add('POST', '/api/quieroAsistir', 'APIParticipantesController@confirmoParticipacion');
+Route::add('DELETE', '/api/quieroBajarme/{id}', 'APIParticipantesController@eliminoParticipacion');
 
 //Favoritos
 Route::add('GET', '/api/mis_favoritos/{id}', 'APIUserController@listarFavoritos');
@@ -25,6 +32,7 @@ Route::add('GET', '/api/mis_favoritos/{id}', 'APIUserController@listarFavoritos'
 Route::add('GET', '/api/posteos', 'APIPosteosController@listar');
 Route::add('POST', '/api/posteos', 'APIPosteosController@crear');
 Route::add('GET', '/api/posteos/{id}', 'APIPosteosController@ver');
+Route::add('GET', '/api/posteosAmigos/{id}', 'APIPosteosController@posteosDeAmigos');
 Route::add('GET', '/api/mis_posteos/{id}', 'APIPosteosController@listarMisPosteos');
 
 

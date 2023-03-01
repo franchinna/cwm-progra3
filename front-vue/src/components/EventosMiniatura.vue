@@ -1,6 +1,6 @@
 <template>
   <router-link :to="`/eventos/${evento.id_evento}`" class="text-decoration-none">
-    <div class="d-flex align-items-center bg-light rounded p-2 border box-sh mb-2">
+    <article class="d-flex align-items-center bg-light rounded p-2 border box-sh mb-2">
       <div>
         <img 
           :src="imagenPath" 
@@ -13,7 +13,7 @@
           <i class="bi bi-geo text-danger"></i> {{evento.localizacion}}
         </p>
       </div>
-    </div>
+    </article>
   </router-link>
 </template>
 

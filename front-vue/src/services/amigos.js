@@ -5,25 +5,7 @@ let amigos = null;
 // Creamos el objeto del servicio.
 const amigosService = {
     /**
-     * Retorna los amigos.
-     *
-     * @return {Promise<Response | never>}
-     */
-    getAll: async function() {
-        const fetchResponse = await fetch(`${API}/amigos`, {
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
-            //credentials: 'include'
-        });
-        const respuesta     = await fetchResponse.json();
-        amigos = respuesta.data;
-        
-        return [...amigos];
-    },
-
-    /**
-     * Retorna los datos de un comentario.
+     * Retorna todos los amigos del usaurio logueado.
      *
      * @param {Number} id
      * @return {Promise<Response | never>}
@@ -33,6 +15,48 @@ const amigosService = {
         //console.log('id en amigos.js -> ',id);
 
         const fetchResponse = await fetch(`${API}/amigos/${id}`, {
+            //credentials: 'include'
+        });
+        const respuesta = await fetchResponse.json();
+
+        amigos = respuesta.data;
+        
+        //console.log('Respuesta de getByIdUsuario: ',{...amigos});
+        return [...amigos];
+    },
+
+    /**
+     * Retorna todos los amigos PENDIENTES del usaurio logueado.
+     *
+     * @param {Number} id
+     * @return {Promise<Response | never>}
+     */
+    traerAmigosPendientes:async function(id) {
+
+        //console.log('id en amigos.js -> ',id);
+
+        const fetchResponse = await fetch(`${API}/pendientes/${id}`, {
+            //credentials: 'include'
+        });
+        const respuesta = await fetchResponse.json();
+
+        amigos = respuesta.data;
+        
+        //console.log('Respuesta de getByIdUsuario: ',{...amigos});
+        return [...amigos];
+    },
+
+    /**
+     * Retorna todos los NO amigos del usaurio logueado.
+     *
+     * @param {Number} id
+     * @return {Promise<Response | never>}
+     */
+    traerNoAmigosPorUsuario:async function(id) {
+
+        //console.log('id en amigos.js -> ',id);
+
+        const fetchResponse = await fetch(`${API}/noAmigos/${id}`, {
             //credentials: 'include'
         });
         const respuesta = await fetchResponse.json();
@@ -70,13 +94,10 @@ const amigosService = {
      * @param {{}} data
      * @return {Promise<Response | never>}
      */
-    edit: function(id, data) {
-        return fetch(`${API}/amigos/${id}`, {
+    aceptarAmigo: function(id_usuario, id_amigo) {
+
+        return fetch(`${API}/aceptarAmigo/${id_usuario}/${id_amigo}`, {
             method: 'PUT',
-            body: JSON.stringify(data),
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
             credentials: 'include'
         })
             .then(rta => rta.json())
@@ -86,13 +107,34 @@ const amigosService = {
     },
 
     /**
-     * Elimina un comentario en el servidor según su id.
+     * Agrega un amigo en el servidor según su id.
      *
-     * @param {Number} id
+     * @param {Number} id_usuario
+     * @param {Number} id_amigo
      * @return {Promise}
      */
-    deleteItem: function(id) {
-        return fetch(`${API}/amigos/${id}`, {
+    agregarAmigo: function(id_usuario, id_amigo) {
+
+        return fetch(`${API}/agregarAmigo/${id_usuario}/${id_amigo}`, {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(rta => rta.json())
+            .then(response => {
+                return response.success;
+            });
+    },
+
+    /**
+     * Elimina un amigo en el servidor según su id.
+     *
+     * @param {Number} id_usuario
+     * @param {Number} id_amigo
+     * @return {Promise}
+     */
+    eliminarAmigo: function(id_usuario, id_amigo) {
+
+        return fetch(`${API}/eliminarAmigo/${id_usuario}/${id_amigo}`, {
             method: 'DELETE',
             // Por defecto, fetch *no* envía ni recibe cookies.
             // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente

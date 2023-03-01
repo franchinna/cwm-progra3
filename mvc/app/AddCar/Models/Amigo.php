@@ -69,7 +69,7 @@ class Amigo extends Modelo implements JsonSerializable
                 SELECT a.*, u.usuario as username, u.imagen as userimg 
                 FROM amigos a
                 INNER JOIN usuarios u on u.id = a.id_amigo
-                where a.id_usuario = ?
+                where a.id_usuario = ? AND a.status = 1;
                 ";
 
         $stmt = $db->prepare($query);
@@ -87,36 +87,195 @@ class Amigo extends Modelo implements JsonSerializable
     }
 
     /**
-     * Crea un registro en la tabla con la $data proporcionada.
+     * Retorna un array con todos los amigos.
+     * Cada amigo va a esta representado como una instancia de amigo.
      *
-     * @param array $data
-     * @param int $id
+     * @return Amigo[]
+     */
+    public function traerAmigosPendientesPorUsuario($id_usuario)
+    {
+        $db = DBConnection::getConnection();
+
+        $query = "
+                SELECT a.*, u.usuario as username, u.imagen as userimg 
+                FROM amigos a
+                INNER JOIN usuarios u on u.id = a.id_amigo
+                where a.id_usuario = ? AND a.status = 0
+                ";
+
+
+        $stmt = $db->prepare($query);
+        $stmt->execute([$id_usuario]);
+
+        $salida = [];
+
+        while ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $amigo = new Amigo;
+            $amigo->massAssignament($fila);
+            $salida[] = $amigo;
+        }
+
+        return $salida;
+    }
+
+    /**
+     * Retorna un array con todos los amigos.
+     * Cada amigo va a esta representado como una instancia de amigo.
+     *
+     * @return Amigo[]
+     */
+    public function traerNoAmigosPorUsuario($id_usuario)
+    {
+        $db = DBConnection::getConnection();
+
+        $query = "SELECT u.usuario as username, u.id as id_amigo, u.imagen as userimg 
+                    FROM usuarios u WHERE id NOT IN (
+                    SELECT id_usuario 
+                    FROM Amigos 
+                    WHERE id_amigo = :id_usuario1 AND status = 1) 
+                    AND u.id != :id_usuario2;";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute([
+            ':id_usuario1' => $id_usuario,
+            ':id_usuario2' => $id_usuario
+        ]);
+
+        $salida = [];
+
+        while ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $amigo = new Amigo;
+            $amigo->massAssignament($fila);
+            $salida[] = $amigo;
+        }
+
+        return $salida;
+    }
+
+    /**
+     * Crea un registro de Amigo en la tabla amigos
+     *
+     * @param string $id_amigo
+     * @param string $id_usuario
      * @throws Exception
      */
-    public function crear($id, array $data)
+    public function agregarAmigo($id_usuario, $id_amigo)
     {
 
         $db = DBConnection::getConnection();
-        $query = "INSERT INTO comentarios (cuerpo, fecha, id_usuario)
-              VALUES (:cuerpo, :fecha, :id_usuario)";
+        $query = "INSERT INTO `db_addcar`.`amigos` (`id_usuario`, `id_amigo`, `status`) VALUES (:id_amigo, :id_usuario, '0');";
 
         $stmt = $db->prepare($query);
         $exito = $stmt->execute([
-            'cuerpo' => $data['cuerpo'],
-            'id_usuario' => $data['id_usuario'],
-            'fecha' => date("Y-m-d H:i:s")
+            'id_amigo' => (string) $id_amigo,
+            'id_usuario' => (string) $id_usuario
         ]);
 
-
         if (!$exito) {
-            throw new Exception('No se pudo crear el Comentario.');
+            throw new Exception('Ups! Hubo un error en agregar a tu amigo, intentá nuevamente. Si el error persiste, ponete en contacto con el soporte');
         }
 
-        $data['id'] = $db->lastInsertId();
+        $data['id_usuario'] = $db->lastInsertId();
 
         $this->massAssignament($data);
-        //$this->cargarTablaPosteosHasComentarios($id, $data['id']);
     }
+
+    /**
+     * Actualiza el status de un amigo de pendienta a aceptado
+     *
+     * @param string $id_amigo
+     * @param string $id_usuario
+     * @throws Exception
+     */
+    public function aceptarAmigo($id_usuario, $id_amigo)
+    {
+
+        $db = DBConnection::getConnection();
+
+        $query = "INSERT INTO amigos (id_usuario, id_amigo, status) VALUES (:id_amigo, :id_usuario, '1');";
+
+        $stmt = $db->prepare($query);
+        $exito = $stmt->execute([
+            'id_amigo' => (string) $id_amigo,
+            'id_usuario' => (string) $id_usuario,
+        ]);
+
+        if (!$exito) {
+            throw new Exception('Ups! Hubo un error en aceptar a tu amigo, intentá nuevamente. Si el error persiste, ponete en contacto con el soporte');
+        }
+
+        $data['id_usuario'] = $db->lastInsertId();
+
+        $this->massAssignament($data);
+        
+        $this->actualizarRelacionEntreUsaarios($id_usuario, $id_amigo);
+    }
+
+    /**
+     * Crea un registro en la tabla con la $data proporcionada.
+     *
+     * @param int $id_usuario
+     * @param int $id_amigo
+     * @throws Exception
+     */
+    public function actualizarRelacionEntreUsaarios($id_usuario, $id_amigo)
+    {
+        $db = DBConnection::getConnection();
+
+        $query = "UPDATE amigos SET status = 1 WHERE (id_usuario = :id_usuario) and (id_amigo = :id_amigo)";
+
+        $stmt = $db->prepare($query);
+        $exito = $stmt->execute([
+            'id_amigo' => (string) $id_amigo,
+            'id_usuario' => (string) $id_usuario
+        ]);
+
+        if (!$exito) {
+            throw new Exception('Ups! Hubo un error en aceptar a tu amigo, intentá nuevamente. Si el error persiste, ponete en contacto con el soporte');
+        }
+
+        $data['id_usuario'] = $db->lastInsertId();
+
+        $this->massAssignament($data);
+    }
+
+    /**
+     * Elimina un registro en la tabla
+     *
+     * @param string $id_amigo
+     * @param string $id_usuario
+     * @throws Exception
+     */
+    public function eliminarAmigo($id_usuario, $id_amigo)
+    {
+
+        $db = DBConnection::getConnection();
+
+        $query = "DELETE FROM `db_addcar`.`amigos` WHERE (`id_usuario` = :id_usuario) and (`id_amigo` = :id_amigo);";
+
+        $stmt = $db->prepare($query);
+        $exito = $stmt->execute([
+            'id_amigo' => (string) $id_amigo,
+            'id_usuario' => (string) $id_usuario,
+        ]);
+
+        $query = "DELETE FROM `db_addcar`.`amigos` WHERE (`id_usuario` = :id_amigo) and (`id_amigo` = :id_usuario);";
+
+        $stmt = $db->prepare($query);
+        $exito = $stmt->execute([
+            'id_amigo' => (string) $id_amigo,
+            'id_usuario' => (string) $id_usuario,
+        ]);
+
+        if (!$exito) {
+            throw new Exception('Ups! Hubo un error en eliminar a tu amigo, intentá nuevamente. Si el error persiste, ponete en contacto con el soporte');
+        }
+
+        $data['id_usuario'] = $db->lastInsertId();
+
+        $this->massAssignament($data);
+    }
+
 
     /**
      * @return mixed
@@ -165,7 +324,7 @@ class Amigo extends Modelo implements JsonSerializable
         $this->status = $status;
     }
 
-    
+
     /**
      * @return mixed
      */
@@ -180,7 +339,8 @@ class Amigo extends Modelo implements JsonSerializable
     public function setUserImg($userimg)
     {
         $this->userimg = $userimg;
-    }/**
+    }
+    /**
      * @return mixed
      */
     public function getUsername()
@@ -195,5 +355,4 @@ class Amigo extends Modelo implements JsonSerializable
     {
         $this->username = $username;
     }
-
 }

@@ -117,13 +117,18 @@ class Usuario extends Modelo implements JsonSerializable
     public function crear($data){
         $db = DBConnection::getConnection();
 
-        $query = "INSERT INTO `db_addcar`.`usuarios` (`email`, `password`)
-                    VALUES (:email, :password);";
+        $imagen = 'pordefecto.jpg';
+        $usuario = 'user#'.rand(10000,99999);
+
+        $query = "INSERT INTO `db_addcar`.`usuarios` (`email`, `password`, `imagen`, `usuario`)
+                    VALUES (:email, :password, :imagen, :usuario);";
 
         $stmt = $db->prepare($query);
         $exito = $stmt->execute([
             'email' => $data['email'],
             'password' => password_hash($data['password'],PASSWORD_DEFAULT),
+            'imagen' => $imagen,
+            'usuario' => $usuario,
         ]);
 
         if(!$exito) {

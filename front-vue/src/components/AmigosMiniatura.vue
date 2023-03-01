@@ -3,11 +3,10 @@
       :src="imagenPath" 
       :alt="'Avatar de ' + amigo.username"
       :title="amigo.username"
-      class="avatar-amigo img-fluid">
+      class="avatar-amigo img-fluid border-drop">
 </template>
 
 <script>
-import store from "@/store";
 import { PATH_IMGS } from "@/constants";
 
 export default {
@@ -15,7 +14,6 @@ export default {
   props: ["amigo"],
   data: function () {
     return {
-      store,
     };
   },
   computed: {
@@ -33,8 +31,6 @@ export default {
     tieneImagen() {
       return this.amigo.userimg !== null && this.amigo.userimg !== "";
     },
-
-    
   },
   methods: {},
 };

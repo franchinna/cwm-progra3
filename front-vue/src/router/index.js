@@ -8,6 +8,7 @@ import Perfil from '@/views/Perfil.vue';
 import Amigos from '@/views/Amigos.vue';
 import PosteosVer from "@/views/PosteosVer";
 import EventosVer from "@/views/EventosVer";
+import EventoNuevo from "@/views/EventoNuevo";
 import Login from '@/views/Login.vue';
 import Registro from '@/views/Registro.vue';
 import PosteoNuevo from "@/views/PosteoNuevo";
@@ -41,6 +42,14 @@ const routes = [
         path: '/posteos/:id',
         name: 'PosteosVer',
         component: PosteosVer
+    },
+    {
+        path: '/eventonuevo',
+        name: 'EventoNuevo',
+        component: EventoNuevo,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/eventos/:id',

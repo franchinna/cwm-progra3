@@ -5,9 +5,11 @@
         <div class="col-12 col-md-12 col-lg-3">
           <PerfilDatos v-if="editarUser" @click="editarUsuario()" />
           <PerfilEditar v-else @click="editarUsuario()"/>
-
           <div class="mt-3">
-            <h2>Mis amigos</h2>
+            <div class="d-flex justify-content-between align-content-center">
+              <h2 class="d-inline p-0 m-0">Mis amigos</h2>
+              <router-link to="/amigos" class="btn btn-light d-inline" title="Agregar amigos"><i class="bi bi-person-add m-0 p-0"></i></router-link>
+            </div>
             <p class="px-4 py-2 border alert alert-warning text-center" role="alert" v-if="amigos.length === 0"> No tenés amigos </p>
             <ListadoMisAmigos :amigos="AmigosOrdenados" class="mt-3" v-else/>
           </div>
@@ -34,12 +36,12 @@
         <div class="col-12 col-md col-lg-3">
           <h2>Favoritos</h2>
           <p
-            class="px-4 py-2 border alert alert-warning text-center"
+            class="px-4 py-2 mt-0 border alert alert-warning text-center"
             role="alert"
           >
-            No tenés favoritos
+            Proximamente! 🙂
           </p>
-          <div class="col-12 col-md col-lg py-2 mb-3 border bg-light rounded box-sh">
+          <div class="col-12 col-md col-lg py-2 mb-3 border bg-light rounded box-sh d-none">
             <router-link to="/posteos/20" class="text-decoration-none">
               <h3 class="f-16">Titulo del posteo</h3>
               <p class="m-0 post-fav">
@@ -55,9 +57,9 @@
               </div>
             </router-link>
           </div>
-          <div class="col-12 col-md col-lg py-2 mb-3 rounded">
+          <aside class="col-12 col-md col-lg py-2 mb-3 rounded">
             <img :src="imagenPath" alt="" class="img-fluid">
-          </div>
+          </aside>
         </div>
       </div>
     </div>

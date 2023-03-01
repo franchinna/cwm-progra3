@@ -1,15 +1,26 @@
 <template>
   <div>
-    <h2>Eventos</h2>
-    <div v-if="eventos.lenght === 0 " class="box-sh p-2 border text-center alert alert-info" role="alert">
-      <p class="m-0 p-0 f-14">Quiero participar de un evento</p>
+    <div class="d-flex justify-content-between mb-2">
+      <h2 class="d-inline-block p-0 m-0">Eventos</h2>
+      <!--Proximamente crear eventos para usaurios-->
+      <router-link
+        to="/EventoNuevo"
+        class="btn btn-light mr-3 d-none"
+        title="Crear evento"
+        v-if="store.auth.id !== null"
+      >
+        <i class="bi bi-calendar2-plus m-0 p-0"></i>
+      </router-link>
     </div>
-    <EventosMiniatura
-      v-else
-      v-for="evento in eventos"
-      :key="evento.id_evento"
-      :evento="evento"/>
-    <hr />
+    <div
+      class="d-flex flex-wrap justify-content-between scroll align-content-start py-2"
+    >
+      <EventosMiniatura
+        v-for="evento in eventos"
+        :key="evento.id_evento"
+        :evento="evento"
+      />
+    </div>
   </div>
 </template>
 
@@ -20,18 +31,18 @@ import store from "@/store";
 export default {
   name: "ListadoEventos",
   components: {
-    EventosMiniatura
+    EventosMiniatura,
   },
   props: {
     eventos: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
-  data: function(){
+  data: function () {
     return {
       store,
-    }
-  }
-}
+    };
+  },
+};
 </script>

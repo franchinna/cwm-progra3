@@ -39,6 +39,17 @@ class APIPosteosController extends BaseAPIController
             'data' => $posteos
         ]);
     }
+    
+    public function posteosDeAmigos()
+    {
+        $id = urlParam('id');
+
+        $posteos = (new Posteo)->listarPosteosAmigos($id);
+
+        View::renderJson([
+            'data' => $posteos
+        ]);
+    }
 
     public function crear()
     {

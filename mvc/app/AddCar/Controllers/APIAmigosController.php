@@ -4,7 +4,6 @@ namespace AddCar\Controllers;
 
 use AddCar\Core\View;
 use AddCar\Models\Amigo;
-use AddCar\Validation\Validator;
 
 class APIAmigosController extends BaseAPIController
 {
@@ -19,53 +18,79 @@ class APIAmigosController extends BaseAPIController
         ]);
     }
 
-
-    public function crear()
+    public function traerAmigosPendientesPorUsuario()
     {
-        $this->requireAuth();
         $id = urlParam('id');
 
-        $json = file_get_contents('php://input');
-        $postData = json_decode($json, true);
-
-        $validator = new Validator($postData, [
-            'cuerpo' => ['required', 'min:10']
+        $amigos = (new Amigo)->traerAmigosPendientesPorUsuario($id);
+        View::renderJson([
+            'data' => $amigos
         ]);
-
-        if(!$validator->passes()) {
-            View::renderJson([
-                'success' => false,
-                'errores' => $validator->getErrores()
-            ]);
-            exit;
-        }
-
-        $participante = new Amigo;
-        try {
-            $participante->crear($id, $postData);
-            View::renderJson([
-                'success' => true,
-                'data' => $participante
-            ]);
-        } catch(\Exception $e) {
-            View::renderJson([
-                'success' => false,
-            ]);
-        }
     }
 
-    public function eliminar()
+    public function traerNoAmigosPorUsuario()
     {
         $id = urlParam('id');
+
+        $amigos = (new Amigo)->traerNoAmigosPorUsuario($id);
+        View::renderJson([
+            'data' => $amigos
+        ]);
+    }
+
+    public function agregarAmigo()
+    {
+        $this->requireAuth();
+        
+        $id_amigo = urlParam('id_amigo');
+        $id_usuario = urlParam('id_usuario');
+
         try {
-            (new Amigo())->eliminar($id);
+            (new Amigo())->agregarAmigo($id_usuario, $id_amigo);
             View::renderJson([
                 'success' => true
             ]);
         } catch(\Exception $e) {
             View::renderJson([
-                'success' => false,
-                'error' => 'Error en la base de datos.'
+                'success' => false
+            ]);
+        }
+    }
+
+    public function aceptarAmigo()
+    {
+        $this->requireAuth();
+
+        $id_amigo = urlParam('id_amigo');
+        $id_usuario = urlParam('id_usuario');
+
+        try {
+            (new Amigo())->aceptarAmigo($id_usuario, $id_amigo);
+            View::renderJson([
+                'success' => true
+            ]);
+        } catch(\Exception $e) {
+            View::renderJson([
+                'success' => false
+            ]);
+        }
+    }
+    
+    public function eliminarAmigo()
+    {
+        $this->requireAuth();
+
+        $id_amigo = urlParam('id_amigo');
+        $id_usuario = urlParam('id_usuario');
+
+        try {
+            (new Amigo())->eliminarAmigo($id_usuario, $id_amigo);
+            View::renderJson([
+                'success' => true
+            ]);
+        } catch(\Exception $e) {
+            View::renderJson([
+                'success' => false
             ]);
         }
     }

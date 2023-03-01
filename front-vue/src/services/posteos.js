@@ -37,6 +37,22 @@ const posteosService = {
     },
 
     /**
+     * Retorna los amigos de un usuario.
+     *
+     * @param {Number} id
+     * @return {Promise}
+     */
+    posteosDeAmigos:async function(id) {
+
+        const fetchResponse = await fetch(`${API}/posteosAmigos/${id}`, {
+            credentials: 'include'
+        });
+        const respuesta = await fetchResponse.json();
+        
+        return [...respuesta.data];
+    },
+
+    /**
      * Retorna los datos de un posteo.
      *
      * @param {Number} id

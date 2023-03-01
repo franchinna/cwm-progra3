@@ -44,15 +44,14 @@ const participantesService = {
     },
 
     /**
-     * Crea un nuevo comentario en el servidor.
+     * Registra al usuario logiado en el evento
      *
-     * @param {Number} id
      * @param {{}} data
      * @return {Promise<Response | never>}
      */
-    create: function(id,data) {
+    create: function(data) {
 
-        return fetch(`${API}/participantes/${id}`, {
+        return fetch(`${API}/quieroAsistir`, {
             method: 'POST',
             body: JSON.stringify(data),
             credentials: 'include'
@@ -64,39 +63,16 @@ const participantesService = {
     },
 
     /**
-     * Edita un comentario en el servidor según su id.
+     * Elimina al usuario logiado en el evento
      *
-     * @param {Number} id
-     * @param {{}} data
-     * @return {Promise<Response | never>}
+     *
+     *
      */
-    edit: function(id, data) {
-        return fetch(`${API}/participantes/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
-            credentials: 'include'
-        })
-            .then(rta => rta.json())
-            .then(response => {
-                return response;
-            });
-    },
+    deleteItem: function(id, data) {
 
-    /**
-     * Elimina un comentario en el servidor según su id.
-     *
-     * @param {Number} id
-     * @return {Promise}
-     */
-    deleteItem: function(id) {
-        return fetch(`${API}/participantes/${id}`, {
+        return fetch(`${API}/quieroBajarme/${id}`, {
             method: 'DELETE',
-            // Por defecto, fetch *no* envía ni recibe cookies.
-            // Si quiero permitir el uso de cookies, tengo que explícitamente declararlo con la siguiente
-            // propiedad:
+            body: JSON.stringify(data),
             credentials: 'include'
         })
             .then(rta => rta.json())

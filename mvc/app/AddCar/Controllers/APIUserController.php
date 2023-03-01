@@ -72,7 +72,7 @@ class APIUserController
             $usuario->crear($postData);
             View::renderJson([
                 'success' => true,
-                'data' => $usuario
+                //'data' => $usuario
             ]);
         } catch(\Exception $e) {
             View::renderJson([

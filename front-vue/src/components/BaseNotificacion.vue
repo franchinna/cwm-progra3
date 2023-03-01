@@ -1,25 +1,26 @@
 <template>
-    <div
-        class="alert alert-dismissible"
-        :class="['alert-' + tipo]"
-    >
-      <h3
-          class="alert-heading"
-          v-if="titulo != null"
-      >
-        {{ titulo }}
-      </h3>
-      {{ mensaje }}
-      <button
-          type="button"
-          class="close"
-          aria-label="Cerrar"
-          v-if="closable"
-          @click="$emit('close')"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
+  <section class="container-fluid pb-0">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-dismissible" :class="['alert-' + tipo]">
+            <p class="alert-heading p-0 m-0" :class="['text-' + tipo]" v-if="titulo != null">
+              <span class="font-bold" :class="['text-' + tipo]">{{ titulo }}.</span> {{ mensaje }}
+            </p>
+            <button
+              type="button"
+              class="close"
+              aria-label="Cerrar"
+              v-if="closable"
+              @click="$emit('close')"
+            >
+              <i class="bi bi-x m-0"></i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 </template>
 
 <script>
@@ -29,26 +30,24 @@ export default {
   props: {
     mensaje: {
       type: String,
-      required: true
+      required: true,
     },
     tipo: {
       type: String,
-      default: 'primary'
+      default: "primary",
     },
     closable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     titulo: String,
   },
   data: function () {
-    return {}
+    return {};
   },
   computed: {},
-  methods: {}
-}
+  methods: {},
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -95,32 +95,56 @@ class Participante extends Modelo implements JsonSerializable
      * Crea un registro en la tabla con la $data proporcionada.
      *
      * @param array $data
-     * @param int $id
      * @throws Exception
      */
-    public function crear($id, array $data)
+    public function crear(array $data)
     {
 
         $db = DBConnection::getConnection();
-        $query = "INSERT INTO comentarios (cuerpo, fecha, id_usuario)
-              VALUES (:cuerpo, :fecha, :id_usuario)";
+
+        $query = "INSERT INTO `participantes` (`id_evento`, `id_usuario`) VALUES (:id_evento, :id_usuario)";
 
         $stmt = $db->prepare($query);
         $exito = $stmt->execute([
-            'cuerpo' => $data['cuerpo'],
+            'id_evento' => $data['id_evento'],
             'id_usuario' => $data['id_usuario'],
-            'fecha' => date("Y-m-d H:i:s")
         ]);
 
-
         if (!$exito) {
-            throw new Exception('No se pudo crear el Comentario.');
+            throw new Exception('Hubo un error en registrar la asistencia, intentá nuevamente.');
         }
 
         $data['id'] = $db->lastInsertId();
 
         $this->massAssignament($data);
-        //$this->cargarTablaPosteosHasComentarios($id, $data['id']);
+    }
+
+    /**
+     * Elimina un registro en la tabla con la $data proporcionada.
+     *
+     * @param array $data
+     * @throws Exception
+     */
+    public function eliminar(array $data)
+    {
+
+        $db = DBConnection::getConnection();
+
+        $query = "DELETE FROM `participantes` WHERE (`id_usuario` = :id_usuario AND `id_evento` = :id_evento);";
+
+        $stmt = $db->prepare($query);
+        $exito = $stmt->execute([
+            'id_evento' => $data['id_evento'],
+            'id_usuario' => $data['id_usuario'],
+        ]);
+
+        if (!$exito) {
+            throw new Exception('Hubo un error en registrar la asistencia, intentá nuevamente.');
+        }
+
+        $data['id'] = $db->lastInsertId();
+
+        $this->massAssignament($data);
     }
 
     /**
@@ -185,7 +209,6 @@ class Participante extends Modelo implements JsonSerializable
     {
         $this->asistencia = $asistencia;
     }
-
     
     /**
      * @return mixed

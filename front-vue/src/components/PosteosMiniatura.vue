@@ -1,6 +1,6 @@
 <template>
-    <router-link :to="`/posteos/${posteo.id_posteo}`" class="text-decoration-none">
-      <div class="posteo mb-2 bg-light box-sh">
+    <router-link :to="`/posteos/${posteo.id_posteo}`" class="text-decoration-none w-100">
+      <article class="posteo mb-2 bg-light box-sh">
         <div
           :class="{
             'd-none': isProfile,
@@ -11,7 +11,7 @@
             <ul>
               <li>
                 <img
-                  class="img-fluid"
+                  class="img-fluid border-drop"
                   :src="imagenPath"
                   :alt="'Avatar del usuario' + posteo.email"
                   :title="'Posteo creado por' + posteo.email"
@@ -20,7 +20,8 @@
               <li>{{ posteo.username }}</li>
               <li>{{ posteo.fecha }}</li>
             </ul>
-            <div v-if="store.auth.id !== null">
+            <!--Proximamente favs-->
+            <div v-if="store.auth.id !== null" class="d-none">
               <div class="text-right">
                 <a href="#" title="No me gusta">
                   <i class="bi bi-hand-thumbs-down"></i>
@@ -35,7 +36,7 @@
         </div>
         <h3>{{ posteo.titulo }}</h3>
         <p class="pr-2 m-0">{{ posteo.cuerpo }}</p>
-      </div>
+      </article>
     </router-link>
 </template>
 

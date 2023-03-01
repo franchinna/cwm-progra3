@@ -15,7 +15,7 @@
       <img 
         :src="imagenPath"
         :alt="usuario.email"
-        class="img-fluid avatar">
+        class="img-fluid avatar border-drop">
         
       <h3 class="my-2"><span class="f-24 font-bold">{{usuario.usuario}}</span></h3>
 
@@ -78,5 +78,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

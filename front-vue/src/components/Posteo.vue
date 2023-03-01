@@ -4,7 +4,7 @@
       <div class="col-12 col-md-3 col-lg-3 user">
         <div class="row">
           <div class="col-4 col-md-12 col-lg-12">
-            <img class="img-fluid rounded"
+            <img class="img-fluid border-drop"
                  :src="imagenPath"
                  :alt="posteo.usernanme">
           </div>

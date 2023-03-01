@@ -19,30 +19,17 @@ class APIParticipantesController extends BaseAPIController
         ]);
     }
 
-
-    public function crear()
+    public function confirmoParticipacion()
     {
         $this->requireAuth();
-        $id = urlParam('id');
 
         $json = file_get_contents('php://input');
         $postData = json_decode($json, true);
 
-        $validator = new Validator($postData, [
-            'cuerpo' => ['required', 'min:10']
-        ]);
-
-        if(!$validator->passes()) {
-            View::renderJson([
-                'success' => false,
-                'errores' => $validator->getErrores()
-            ]);
-            exit;
-        }
-
         $participante = new Participante;
+
         try {
-            $participante->crear($id, $postData);
+            $participante->crear($postData);
             View::renderJson([
                 'success' => true,
                 'data' => $participante
@@ -50,15 +37,21 @@ class APIParticipantesController extends BaseAPIController
         } catch(\Exception $e) {
             View::renderJson([
                 'success' => false,
+                'error' => "Hubo un error en registrar la asistencia, intentá nuevamente."
             ]);
         }
     }
 
-    public function eliminar()
+    public function eliminoParticipacion()
     {
-        $id = urlParam('id');
+        
+        $this->requireAuth();
+
+        $json = file_get_contents('php://input');
+        $postData = json_decode($json, true);
+
         try {
-            (new Participante())->eliminar($id);
+            (new Participante())->eliminar($postData);
             View::renderJson([
                 'success' => true
             ]);

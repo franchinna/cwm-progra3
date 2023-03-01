@@ -4,7 +4,7 @@
     <div class="bg-white p-3 rounded box-sh" v-else>
       <div>
         <img
-          :src="imagenPath"
+          :src="ImagenPath"
           alt="Imagen del Evento"
           class="img-fluid rounded mb-3"
         />
@@ -26,11 +26,26 @@
         </p>
       </div>
       <div class="mb-3">
-        <ListadoMisAmigos :amigos="ParticipantesOrdenados" class="mt-3"/>
+        <SpinnerLoader v-if="estaCargandoParticipantes" class="bg-white"/>
+        <ListadoMisAmigos :amigos="ParticipantesOrdenados" class="mt-3" v-else/>
       </div>
-      <div class="text-right">
-        <button class="btn btn-success mr-2">Quiero asistir</button>
-        <button class="btn btn-outline-danger">Eliminar participación</button>
+      <div class="text-right" v-if="store.auth.id != null">
+        <button
+          class="btn btn-success mr-2"
+          v-if="UsuarioParticipa"
+          @click="quieroAsistir(participante)"
+        >
+          Quiero asistir
+        </button>
+        <button class="btn btn-outline-danger" v-else
+          @click="quieroBajarme(participante)">
+          Eliminar asistencia
+        </button>
+      </div>
+      <div class="text-center bg-light" v-else>
+        <p class="py-3 m-0">
+          <router-link to="/login"><b>Inicia sesión</b></router-link> para asistir al evento
+        </p>
       </div>
     </div>
   </div>
@@ -38,6 +53,8 @@
 
 <script>
 import { PATH_IMGS } from "@/constants";
+import store from "@/store";
+
 import eventosService from "@/services/eventos";
 import participantesService from "@/services/participantes";
 import ListadoMisAmigos from "@/components/ListadoMisAmigos";
@@ -46,13 +63,16 @@ import SpinnerLoader from "@/components/SpinnerLoader";
 export default {
   name: "Evento",
   props: {},
-  components:{
+  components: {
     ListadoMisAmigos,
     SpinnerLoader,
   },
 
   data: function () {
     return {
+      store,
+      estaCargando: true,
+      estaCargandoParticipantes: true,
       evento: {
         id_evento: null,
         titulo: null,
@@ -65,42 +85,119 @@ export default {
         username: null,
       },
       participantes: [],
-      estaCargando: true,
+      participante: {
+        id_evento: null,
+        id_usuario: null,
+      },
     };
   },
   computed: {
     /**
      * @return {String}
      */
-    imagenPath() {
+    ImagenPath() {
       return `${PATH_IMGS}/eventos/${this.evento.imagen}`;
     },
 
-    /**
-     *
-     * @return {boolean}
-     */
-    tieneImagen() {
-      return this.evento.userimg !== null && this.evento.userimg !== "";
-    },
-    
     ParticipantesOrdenados: function () {
       const participantes = this.participantes.slice();
       participantes.reverse();
       return participantes;
     },
-  },
-  methods: {},
-  mounted() {
 
+    UsuarioParticipa: function () {
+      const participante = this.participantes.find(
+        (participante) => participante.id_usuario === this.store.auth.id
+      );
+
+      if (participante) {
+        console.log("El usuario está en el evento");
+        return false;
+      } else {
+        console.log("El usuario no está en el evento");
+        return true;
+      }
+    },
+  },
+  methods: {
+    quieroAsistir: function (participante) {
+      this.participante.id_evento = this.$route.params.id;
+      this.participante.id_usuario = store.auth.id;
+
+      console.log("se ejecuta", this.participante);
+
+      participantesService.create(participante).then((response) => {
+        this.estaCargando = false;
+        if (response.success) {
+          this.participante = {
+            id_evento: null,
+            id_usuario: null,
+          };
+          this.store.setStatus({
+            titulo: "Éxito",
+            mensaje: "El registro para el evento se creó exitosamente.",
+            tipo: "success",
+          });
+
+          const id = this.$route.params.id;
+
+          participantesService.traerUsuariosPorEvento(id).then((data) => {
+            this.participantes = data;
+          });
+        } else {
+          this.store.setStatus({
+            titulo: "Error",
+            mensaje: "Ocurrió un error al tratar de registrar tu participación. Intentá de nuevo más tarde",
+            tipo: "danger",
+          });
+        }
+      });
+    },
+
+    quieroBajarme: function (participante) {
+      this.participante.id_evento = this.$route.params.id;
+      this.participante.id_usuario = store.auth.id;
+      const id = this.$route.params.id;
+
+      console.log("quieroBajarme se ejecuta", this.participante);
+
+      participantesService
+        .deleteItem(this.participante.id_evento, participante)
+        .then((success) => {
+          this.estaCargando = false;
+          if (success) {
+            this.participante = {
+              id_evento: null,
+              id_usuario: null,
+            };
+            this.store.setStatus({
+              titulo: "Éxito",
+              mensaje: "El registro para el evento se eliminó exitosamente.",
+              tipo: "success",
+            });
+            participantesService.traerUsuariosPorEvento(id).then((data) => {
+              this.participantes = data;
+            });
+          } else {
+            this.store.setStatus({
+              titulo: "Error",
+              mensaje: "Ocurrió un error al tratar de registrar tu participación. Intentá de nuevo más tarde",
+              tipo: "danger",
+            });
+          }
+      });
+    },
+  },
+  mounted() {
     const id = this.$route.params.id;
 
     eventosService.getByPk(id).then((data) => {
-      this.evento = data;
       this.estaCargando = false;
+      this.evento = data;
     });
-    
+
     participantesService.traerUsuariosPorEvento(id).then((data) => {
+      this.estaCargandoParticipantes = false;
       this.participantes = data;
     });
   },
