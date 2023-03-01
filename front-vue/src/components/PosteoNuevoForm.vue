@@ -12,7 +12,7 @@
 
     <div class="form-group">
       <label for="titulo" class="small">
-        Título del posteo</label>
+        Título del posteo ( El titulo debe tener al menos 10 caracteres. )</label>
       <input
           type="text"
           class="form-control"
@@ -33,7 +33,7 @@
 
     <div class="form-group">
       <label for="cuerpo"
-             class="small">Escribe sobre el tema que quieres hablar
+             class="small">Escribe sobre el tema que quieres hablar (al menos 30 caracteres)
       </label>
       <textarea
           class="form-control"
