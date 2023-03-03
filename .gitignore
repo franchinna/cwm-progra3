@@ -6,8 +6,14 @@ front-vue/node_modules
 front-vue/.idea
 front-vue/.DS_Store
 mvc/.idea
-mvc/.DS_Store
+mvc/.DS_Store*
 .idea
-.DS_Store
 .DS_Store*
-.DS_Store
+../DS_Store*
+front-vue/.DS_Store*
+front-vue/public/.DS_Store*
+front-vue/src/.DS_Store*
+mvc/.DS_Store*
+mvc/app/.DS_Store*
+mvc/public/.DS_Store*
+mvc/public/imgs/.DS_Store*
