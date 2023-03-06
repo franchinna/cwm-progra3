@@ -15,3 +15,4 @@ TODOS LOS USUARIOS CREADOS EN DB TIENEN LA MISMA PASSWORD (1234)
 
 ########
 REPO GIT https://github.com/franchinna/cwm-progra3.git
+Instrucciones para levantar el proyecto en el readme.md de GIT 
